@@ -3,15 +3,10 @@
 name=$(whoami)
 date=$(date)
 TODAY=$(date "+%Y-%m-%d")
-LOGFILE="/home/michael/audit_report.txt"
-KEY="intranet_changes"
 
-source="/var/www/html/Intranet"
-destination="/var/www/html/Live"
-backup="/home/michael/Documents/TU259/Architecture/Assignment_2"
 
 option1() {
-	zip -r "$backup"/backup.zip "$destination"
+	zip -r "/WebBackups/backup.$(date +"%m-%d-%Y").zip" /var/www/html/Intranet
 }
 
 option2() {

@@ -10,38 +10,19 @@ option1() {
 	zip -r "/WebBackups/backup_Live.$(date +"%m-%d-%Y").zip" /var/www/html/Live
 }
 
-option2() {
-	find "$source" -type f -newermt "$TODAY_START" -exec sudo cp --parents {} "$destination"  \;
-}
+#option2() {
+#	find "$source" -type f -newermt "$TODAY_START" -exec sudo cp --parents {} "$destination"  \;
+#}
 
-#option3() {
-	#echo "Audit Report - $(date)" >> "$LOGFILE"
-	#echo "Generated on $(date)" >> "$LOGFILE"
-	#echo "" >> "$LOGFILE"
+option3() {
+	sudo cp -r -u /var/www/html/Intranet/* /var/www/html/Live
+	echo "loop entered"
+}
 
 option4() {
 	sudo ausearch -f /var/www/html/Intranet/ > /WebBackups/AuditLog.txt | aureport -f -i > /WebBackups/Report_on_Intranet.txt
 }
-	
-# 	sudo ausearch -k "$KEY" -ts "$date" '00:00:00' | grep -E 'type=SYSCALL|type=PATH' | awk '
-# 	#/type=SYSCALL/ {
-# 		#Extract username (auid) and timestamp
-# 	#	split($0, a, "auid=");
-# 	#	split(a[2], b, " "); user=b[1];
-# 	#	match($0, /audit\(([^)]+)\)/, m); timestamp=d[1];
-# 	#}
-# 	#/type=PATH/ {
-# 		# Extract file modified (name)
-# 		#split($0, f, "name=");
-# 		#split(f[2], g, " "); file=g[1];
-# 		# Output user, file and timestamp
-	
-# 	#}
 
-# 	# ' >> "$LOGFILE"
-# 	#echo "User: " user ", File: " file ", Timestamp: " timestamp
-# 	echo "Audit report -$(date)" > "$LOGFILE"
-# }
 
 
 while [ 1 == 1 ]
@@ -60,7 +41,7 @@ do
 	case $userInput in
 		1) echo "Hello $name. You are currently logged in";;
 		2) option1;;
-		#3) option2;;
+		3) option3;;
 		4) option4;;
 		5) exit;;
 	esac

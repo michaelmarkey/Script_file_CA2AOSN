@@ -1,0 +1,67 @@
+#! /bin/bash
+
+name=$(whoami)
+date=$(date)
+TODAY=$(date "+%Y-%m-%d")
+LOGFILE="/home/michael/audit_report.txt"
+KEY="intranet_changes"
+
+source="/var/www/html/Intranet"
+destination="/var/www/html/Live"
+backup="/home/michael/Documents/TU259/Architecture/Assignment_2"
+
+option1() {
+	zip -r "$backup"/backup.zip "$destination"
+}
+
+option2() {
+	find "$source" -type f -newermt "$TODAY_START" -exec sudo cp --parents {} "$destination"  \;
+}
+
+option3() {
+	echo "Audit Report - $(date)" >> "$LOGFILE"
+	echo "Generated on $(date)" >> "$LOGFILE"
+	echo "" >> "$LOGFILE"
+	
+	sudo ausearch -k "$KEY" -ts "$date" '00:00:00' | grep -E 'type=SYSCALL|type=PATH' | awk '
+	#/type=SYSCALL/ {
+		#Extract username (auid) and timestamp
+	#	split($0, a, "auid=");
+	#	split(a[2], b, " "); user=b[1];
+	#	match($0, /audit\(([^)]+)\)/, m); timestamp=d[1];
+	#}
+	#/type=PATH/ {
+		# Extract file modified (name)
+		#split($0, f, "name=");
+		#split(f[2], g, " "); file=g[1];
+		# Output user, file and timestamp
+	
+	#}
+
+	# ' >> "$LOGFILE"
+	#echo "User: " user ", File: " file ", Timestamp: " timestamp
+	echo "Audit report -$(date)" > "$LOGFILE"
+}
+
+
+while [ 1 == 1 ]
+do
+
+	echo "***** Menu *****"
+	echo "Choose one of these options: "
+	echo "1) Who am I and am I logged in?"
+	echo "2) Backup a folder and store it as a zip"
+	echo "3) Copy content from Intranet to Live, content modified: $TODAY"
+	echo "4) Display a log of changes to Intranet"
+	echo "5) Exit the script"
+
+	read userInput
+
+	case $userInput in
+		1) echo "Hello $name. You are currently logged in";;
+		2) option1;;
+		3) option2;;
+		4) option3;;
+		5) exit;;
+	esac
+done

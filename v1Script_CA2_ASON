@@ -6,7 +6,8 @@ TODAY=$(date "+%Y-%m-%d")
 
 
 option1() {
-	zip -r "/WebBackups/backup.$(date +"%m-%d-%Y").zip" /var/www/html/Intranet
+	zip -r "/WebBackups/backup_Intranet.$(date +"%m-%d-%Y").zip" /var/www/html/Intranet
+	zip -r "/WebBackups/backup_Live.$(date +"%m-%d-%Y").zip" /var/www/html/Live
 }
 
 option2() {

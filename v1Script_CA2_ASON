@@ -3,7 +3,8 @@
 name=$(whoami)
 date=$(date)
 TODAY=$(date "+%Y-%m-%d")
-
+GROUPNAME="live_group"
+DIRPATH="/var/www/html/Live/"
 
 option1() {
 	zip -r "/WebBackups/backup_Intranet.$(date +"%m-%d-%Y").zip" /var/www/html/Intranet
@@ -20,9 +21,33 @@ option3() {
 }
 
 option4() {
-	sudo ausearch -f /var/www/html/Intranet/ > /WebBackups/AuditLog.txt | aureport -f -i > /WebBackups/Report_on_Intranet.txt
+	sudo ausearch -f /var/www/html/Intranet/ | aureport -f -i > /WebBackups/reportOnIntranet.txt.$(date +"%m-%d-%Y")
 }
 
+option5() {
+	add_user_to_group() {
+    	read -p "Enter the username: " username
+
+		# Check if the user exists
+        if id "$username"; then
+            echo "User '$username' already exists."
+        else
+            echo "User '$username' does not exist. Creating user ..."
+            sudo useradd -m -s /bin/bash "$username"
+        	sudo passwd "$username"
+			echo "User '$username' created successfully."
+        fi
+
+    	sudo usermod -aG "$GROUPNAME" "$username"
+        echo "User '$username' added to group '$GROUPNAME'."
+
+        # Grant group ownership and permissions on the directory
+        sudo chgrp -R "$GROUPNAME" "$DIRPATH"
+        sudo chmod -R g+rwX "$DIRPATH"
+        echo "Directory '$DIRPATH' is now accessible to group '$GROUPNAME'."
+	}
+	add_user_to_group
+}
 
 
 while [ 1 == 1 ]
@@ -34,7 +59,8 @@ do
 	echo "2) Backup a folder and store it as a zip"
 	echo "3) Copy content from Intranet to Live, content modified: $TODAY"
 	echo "4) Display a log of changes to Intranet"
-	echo "5) Exit the script"
+	echo "5) Add a user to the Live group to make immediate changes"
+	echo "6) Exit the script"
 
 	read userInput
 
@@ -43,6 +69,7 @@ do
 		2) option1;;
 		3) option3;;
 		4) option4;;
-		5) exit;;
+		5) option5;;
+		6) exit;;
 	esac
 done

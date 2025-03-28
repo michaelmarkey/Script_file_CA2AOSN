@@ -7,13 +7,13 @@ GROUPNAME="live_group"
 DIRPATH="/var/www/html/Live/"
 
 option1() {
-	zip -qr "/WebBackups/backup_Intranet.$(date +"%m-%d-%Y%H:%M:%S").zip" /var/www/html/Intranet 
-	zip -qr "/WebBackups/backup_Live.$(date +"%m-%d-%Y%H:%M:%S").zip" /var/www/html/Live
+	zip -r "/WebBackups/backup_Intranet.$(date +"%m-%d-%Y %H:%M:%S").zip" /var/www/html/Intranet
+	zip -r "/WebBackups/backup_Live.$(date +"%m-%d-%Y %H:%M:%S").zip" /var/www/html/Live
 	echo "Intranet and Live directories backed up and stored as zip files in /WebBackups"
 }
 
 option2() {
-	sudo rsync -a --update /var/www/html/Intranet/ /var/www/html/Live
+	sudo cp -r -u /var/www/html/Intranet/* /var/www/html/Live
 	echo "New content from the Intranet directory copied to the Live directory"
 }
 
@@ -63,7 +63,7 @@ do
 
 	case $userInput in
 		1) option1;;
-		2) option2;;
+		2) option1;;
 		3) option3;;
 		4) option4;;
 		5) exit;;

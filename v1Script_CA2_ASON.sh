@@ -18,7 +18,7 @@ option2() {
 }
 
 option3() {
-	sudo ausearch -f /var/www/html/Intranet/ | aureport -f -i > /WebBackups/reportOnIntranet.$(date +"%m-%d-%Y").txt
+	sudo bash -c 'ausearch -f /var/www/html/Intranet/ | aureport -f -i > /WebBackups/reportOnIntranet.$(date +"%m-%d-%Y").txt'
 	echo "Report generated on changes made to Intranet, stored in /WebBackups using a dated file of type reportOnIntranet"
 }
 
@@ -63,7 +63,7 @@ do
 
 	case $userInput in
 		1) option1;;
-		2) option1;;
+		2) option2;;
 		3) option3;;
 		4) option4;;
 		5) exit;;
